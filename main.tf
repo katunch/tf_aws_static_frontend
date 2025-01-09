@@ -48,7 +48,7 @@ resource "aws_cloudfront_distribution" "default" {
   is_ipv6_enabled     = true
   comment             = "${var.applicationName} CloudFront Distribution"
   default_root_object = "index.html"
-  aliases             = [var.fqdn]
+  aliases             = concat([var.fqdn], var.additional_fqdns)
 
   default_cache_behavior {
     allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -71,8 +71,9 @@ resource "aws_cloudfront_distribution" "default" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = var.certificate_arn_us_east_1
-    ssl_support_method  = "sni-only"
+    acm_certificate_arn      = var.certificate_arn_us_east_1
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = var.minimum_protocol_version
   }
 
   dynamic "custom_error_response" {
