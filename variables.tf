@@ -10,6 +10,18 @@ variable "fqdn" {
   type        = string
   description = "The FQDN of the CloudFront distribution"
 }
+
+variable "minimum_protocol_version" {
+  type        = string
+  description = "The minimum protocol version for the CloudFront distribution"
+  default     = "TLSv1.2_2021"
+}
+
+variable "additional_fqdns" {
+  type        = list(string)
+  description = "A list of additional FQDNs for the CloudFront distribution"
+  default     = []
+}
 variable "hosted_zone_id" {
   type        = string
   description = "The Route 53 hosted zone ID"
