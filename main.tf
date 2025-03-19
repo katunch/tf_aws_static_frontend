@@ -35,6 +35,10 @@ resource "aws_iam_policy" "bucketAccess" {
   })
 }
 
+data "aws_cloudfront_cache_policy" "caching_optimized" {
+  name = "Managed-CachingOptimized"
+}
+
 # cloudfront distribution 
 resource "aws_cloudfront_distribution" "default" {
   depends_on = [aws_cloudfront_origin_access_control.default, aws_s3_bucket.default]
@@ -55,13 +59,8 @@ resource "aws_cloudfront_distribution" "default" {
     cached_methods         = ["GET", "HEAD", "OPTIONS"]
     target_origin_id       = aws_s3_bucket.default.bucket
     viewer_protocol_policy = "redirect-to-https"
-
-    forwarded_values {
-      query_string = false
-      cookies {
-        forward = "none"
-      }
-    }
+    cache_policy_id        = data.aws_cloudfront_cache_policy.caching_optimized.id
+    compress               = true
   }
 
   restrictions {
