@@ -60,3 +60,12 @@ variable "custom_error_responses" {
     }
   ]
 }
+
+variable "function_association" {
+  type = list(object({
+    event_type   = string
+    function_arn = string
+  }))
+  description = "A list of function associations for the CloudFront distribution"
+  default     = []
+}
