@@ -61,6 +61,15 @@ resource "aws_cloudfront_distribution" "default" {
     viewer_protocol_policy = "redirect-to-https"
     cache_policy_id        = data.aws_cloudfront_cache_policy.caching_optimized.id
     compress               = true
+
+    # Function associations
+    dynamic "function_association" {
+      for_each = var.function_association
+      content {
+        event_type   = function_association.value.event_type
+        function_arn = function_association.value.function_arn    
+      }
+    }
   }
 
   restrictions {
